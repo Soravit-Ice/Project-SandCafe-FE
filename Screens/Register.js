@@ -125,14 +125,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FEF6DD',
     },
     title: {
+        color:"#224E7F",
         fontSize: 32,
         fontWeight: 'bold',
         marginBottom: 20,
     },
     title1: {
+        color:"#224E7F",
         fontSize: 20,
         marginBottom: 20,
     },
@@ -151,20 +153,20 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 48,
         borderRadius: 5,
-        backgroundColor: '#FF914C9E',
+        backgroundColor: '#224E7F',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
     },
     buttonText: {
-        color: 'black',
+        color: '#ffff',
         fontSize: 16,
     },
     registerButton: {
         marginTop: 20,
     },
     registerText: {
-        color: '#FF914C9E',
+        color: '#224E7F',
         fontSize: 14,
     },
 });

@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FEF6DD',
     },
     logo:{
         marginBottom:20
@@ -113,10 +113,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
+        color:'#224E7F',
         marginBottom: 20,
     },
     title2: {
         fontSize: 22,
+        color:'#224E7F',
         marginBottom: 20,
     },
     input: {
@@ -134,13 +136,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 48,
         borderRadius: 5,
-        backgroundColor: '#FF914C9E',
+        backgroundColor: '#224E7F',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
     },
     buttonText: {
-        color: '#000',
+        color: '#ffff',
         fontSize: 16,
     },
     registerButton: {
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     registerText2: {
-        color: '#FF914C',
+        color: '#224E7F',
         fontSize: 14,
     },
 });

@@ -41,7 +41,7 @@ const SplashScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/LogoSanDee.png')} style={styles.logo} />
+            <Image source={require('../assets/new_logo.png')} style={styles.logo} />
         </View>
     );
 };
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FEF6DD',
     },
     logo: {
         width: '100%',
