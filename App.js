@@ -20,6 +20,8 @@ import OrderAdminPage from './Screens/OrderAdminPage';
 import UserPage from './Screens/UserPage';
 import AdminUserListPage from './Screens/AdminUserListPage';
 import AdminUserEditPage from './Screens/AdminUserPageEdit';
+import ShoppingCartScreen from './Screens/ShoppingCart';
+import Checkout from './Screens/Checkout';
 const Stack = createStackNavigator()
 
 const Tab = createBottomTabNavigator();
@@ -63,6 +65,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminPage"  component={AdminPage} options={{ headerShown: false }} />
+                <Stack.Screen name="ShoppingCart"  component={ShoppingCartScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Checkout"  component={Checkout} options={{ headerShown: false }} />
                 <Stack.Screen name="UserPage"  component={UserPage} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminUserListPage"  component={AdminUserListPage} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminEditUserPage"  component={AdminUserEditPage} options={{ headerShown: false }} />

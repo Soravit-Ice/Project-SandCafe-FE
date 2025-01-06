@@ -28,7 +28,7 @@ const Login = () => {
             const data = await response.json();
 
             if (data.status === 200) {
-                console.log('Login successful', data);
+                console.log('Login successful', data.roles[0].role.name );
                 await AsyncStorage.setItem('accessToken', data.token);
 
                 // Check role and navigate accordingly

@@ -21,30 +21,30 @@ const Menu = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                <Ionicons name="arrow-back" size={24} color="white" />
+                <Ionicons name="arrow-back" size={24} color="#224E7F" />
             </TouchableOpacity>
 
             <View style={styles.profileContainer}>
-                <Ionicons name="person-circle" size={80} color="white" />
-                <Text style={styles.profileName}>PSC CAFE</Text>
+                <Ionicons name="person-circle" size={80} color="#224E7F" />
+                <Text style={styles.profileName}>EONNI cafe & cake</Text>
             </View>
 
             <View style={styles.menuOptionContainer}>
                 <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('SaleAdmin')}>
                     <Text style={styles.menuText}>Sales</Text>
-                    <Ionicons name="chevron-forward" size={24} color="white" />
+                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('OrderAdmin')}>
                     <Text style={styles.menuText}>Order</Text>
-                    <Ionicons name="chevron-forward" size={24} color="white" />
+                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('AdminUserListPage')}>
                     <Text style={styles.menuText}>User</Text>
-                    <Ionicons name="chevron-forward" size={24} color="white" />
+                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuOption} onPress={handleLogout}>
                     <Text style={styles.menuText}>Log Out</Text>
-                    <Ionicons name="chevron-forward" size={24} color="white" />
+                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -54,7 +54,7 @@ const Menu = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FF8A4C',
+        backgroundColor: '#FEF6DD',
         padding: 20,
     },
     backButton: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     profileName: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: 'white',
+        color: '#224E7F',
         marginTop: 10,
     },
     menuOptionContainer: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         fontSize: 18,
-        color: 'white',
+        color: '#224E7F',
     },
 });
 
