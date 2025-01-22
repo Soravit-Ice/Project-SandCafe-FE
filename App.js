@@ -22,6 +22,12 @@ import AdminUserListPage from './Screens/AdminUserListPage';
 import AdminUserEditPage from './Screens/AdminUserPageEdit';
 import ShoppingCartScreen from './Screens/ShoppingCart';
 import Checkout from './Screens/Checkout';
+import CheckoutFinal from './Screens/CheckoutFinal';
+import ProductDetail from './Screens/ProductDetail';
+import CheckoutOrder from './Screens/CheckoutOrder';
+import OrderHistory from './Screens/OrderHistory';
+import CollectPoints from './Screens/CollectPoints';
+import EditProfile from './Screens/EditProfile';
 const Stack = createStackNavigator()
 
 const Tab = createBottomTabNavigator();
@@ -67,7 +73,10 @@ export default function App() {
                 <Stack.Screen name="AdminPage"  component={AdminPage} options={{ headerShown: false }} />
                 <Stack.Screen name="ShoppingCart"  component={ShoppingCartScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Checkout"  component={Checkout} options={{ headerShown: false }} />
+                <Stack.Screen name="CheckoutOrder"  component={CheckoutOrder} options={{ headerShown: false }} />
+                <Stack.Screen name="CheckoutFinal"  component={CheckoutFinal} options={{ headerShown: false }} />
                 <Stack.Screen name="UserPage"  component={UserPage} options={{ headerShown: false }} />
+                <Stack.Screen name="ProductDetail"  component={ProductDetail} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminUserListPage"  component={AdminUserListPage} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminEditUserPage"  component={AdminUserEditPage} options={{ headerShown: false }} />
                 <Stack.Screen name="AdminAddMenu"  component={AdminAddMenu} options={{ headerShown: false }} />
@@ -77,6 +86,9 @@ export default function App() {
                 <Stack.Screen name="Detail" component={Detail} />
                 <Stack.Screen name="SaleAdmin" component={SaleAdminPage} options={{ headerShown: false }} />
                 <Stack.Screen name="OrderAdmin" component={OrderAdminPage} options={{ headerShown: false }} />
+                <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }} />
+                <Stack.Screen name="CollectPoints" component={CollectPoints} options={{ headerShown: false }} />
+                <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
     </FontSizeContext.Provider>

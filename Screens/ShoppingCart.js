@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TextInput,
   TouchableOpacity,
   Alert,
   SafeAreaView,
@@ -12,22 +11,119 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ShoppingCartScreen = () => {
   const navigation = useNavigation();
-  const [quantity, setQuantity] = useState(1);
-
-  const handleIncrease = () => setQuantity(quantity + 1);
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+  const [orderItems, setOrderItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
+  const fetchOrderDetails = async () => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      const response = await axios.get(`http://localhost:8080/api/getOrderDetail`, {
+        headers: {
+          "x-access-token": token,
+        },
+      });
+      const data = response.data.data;
+      console.log("data",data)
+      setOrderItems(data?.orderItems);
+      setTotalPrice(data?.totalPrice ?? 0);
+    } catch (error) {
+      console.error("Error fetching order details:", error);
     }
   };
 
-  const handleSave = () => {
-    navigation.navigate("Checkout", { refresh: true })
+  const fetchDiscount = async () => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      const response = await axios.get(`http://localhost:8080/api/getDiscount`, {
+        headers: { "x-access-token": token },
+      });
+      const data = response?.data;
+      setDiscount(data?.discount ?? 0);
+    } catch (error) {
+      console.error("Error fetching discount:", error);
+    }
+  };
 
+  // Fetch order details from the backend
+  useEffect( () => {
+     fetchOrderDetails();
+     fetchDiscount();
+  }, []);
+
+  useEffect(() => {
+    const discountedPrice = totalPrice - (totalPrice * discount);
+    setFinalPrice(discountedPrice);
+  }, [totalPrice, discount]);
+
+  // Handle increase quantity
+  const updateOrderItem = async (itemId, quantity) => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      const response = await axios.put(
+        `http://localhost:8080/api/updateOrderItem/${itemId}`,
+        { quantity },
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+      console.log("response",response)
+    } catch (error) {
+      console.error("Error updating order item:", error);
+      Alert.alert("Error", "Failed to update the item. Please try again.");
+    }
+  };
+  
+  const handleIncrease = async (itemId) => {
+    const item = orderItems?.find((item) => item.id === itemId);
+    if (item) {
+     await updateOrderItem(itemId, item.quantity + 1);
+      fetchOrderDetails();
+    }
+  };
+  
+  const handleDecrease = async (itemId) => {
+    const item = orderItems?.find((item) => item.id === itemId);
+    if (item && item.quantity > 1) {
+        await updateOrderItem(itemId, item.quantity - 1);
+      fetchOrderDetails();
+    }
+  };
+  // Handle delete item
+  const deleteOrderItem = async (itemId) => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      await axios.delete(`http://localhost:8080/api/deleteOrderItem/${itemId}`, {
+        headers: {
+          "x-access-token": token,
+        },
+      });
+      fetchOrderDetails();
+    } catch (error) {
+      console.error("Error deleting order item:", error);
+      Alert.alert("Error", "Failed to delete the item. Please try again.");
+    }
+  };
+
+  // Calculate total price dynamically
+  useEffect(() => {
+    const newTotal = orderItems?.reduce(
+      (sum, item) => sum + item.price,
+      0
+    );
+    setTotalPrice(newTotal);
+  }, [orderItems]);
+
+  // Handle checkout
+  const handleCheckout = async () => {
+      navigation.navigate("Checkout", { refresh: true });
   };
 
   return (
@@ -44,50 +140,86 @@ const ShoppingCartScreen = () => {
 
       {/* Scrollable Order Section */}
       <ScrollView style={styles.orderContainer}>
-        <View style={styles.productContainer}>
-          {/* Product Image */}
-          <Image
-            source={{ uri: "https://via.placeholder.com/100" }} // Replace with your product image URL
-            style={styles.productImage}
-          />
+        {orderItems?.map((item) => (
+          <View key={item.id} style={styles.productContainer}>
+            <Image
+              source={{ uri: item.product.image }}
+              style={styles.productImage}
+            />
+            <View style={styles.productDetails}>
+              <Text style={styles.productName}>{item.product.name}</Text>
+              <Text style={styles.productPrice}>{item.price} Bath</Text>
+              <Text style={styles.productNote}>
+                * เพิ่มหวาน {item.sweetness_level}%
+              </Text>
+            </View>
+            <View style={styles.actionContainer}>
+              {/* Quantity Controls */}
+              <View style={styles.quantityContainer}>
+                <TouchableOpacity
+                  onPress={() => handleDecrease(item.id)}
+                  style={styles.quantityButton}
+                >
+                  <Text style={styles.quantityText}>−</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantityValue}>{item.quantity}</Text>
+                <TouchableOpacity
+                  onPress={() => handleIncrease(item.id)}
+                  style={styles.quantityButton}
+                >
+                  <Text style={styles.quantityText}>+</Text>
+                </TouchableOpacity>
+              </View>
 
-          {/* Product Details */}
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>Milk frappe</Text>
-            <Text style={styles.productPrice}>45 Bath</Text>
-            <Text style={styles.productNote}>* เพิ่มหวาน 75%</Text>
-
-            {/* Quantity Controls */}
-            <View style={styles.quantityContainer}>
+              {/* Delete Button */}
               <TouchableOpacity
-                onPress={handleDecrease}
-                style={styles.quantityButton}
+                onPress={() => deleteOrderItem(item.id)}
+                style={styles.deleteButton}
               >
-                <Text style={styles.quantityText}>−</Text>
-              </TouchableOpacity>
-              <Text style={styles.quantityValue}>{quantity}</Text>
-              <TouchableOpacity
-                onPress={handleIncrease}
-                style={styles.quantityButton}
-              >
-                <Text style={styles.quantityText}>+</Text>
+                <Ionicons name="trash-outline" size={24} color="#FF5C5C" />
               </TouchableOpacity>
             </View>
           </View>
-        </View>
-
-        {/* Additional items can go here */}
+        ))}
       </ScrollView>
 
       {/* Fixed Footer */}
       <SafeAreaView style={styles.footer}>
         <View style={styles.footerContent}>
-          <Text style={styles.headerTextTotal}>ยอดชำระ</Text>
-          <Text style={styles.headerTextTotal}>45</Text>
+          <Text style={styles.headerTextTotal}>ราคา</Text>
+          <Text style={styles.headerTextTotal}>{totalPrice} บาท</Text>
         </View>
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>Checkout</Text>
-        </TouchableOpacity>
+
+        {discount > 0 && orderItems  && (
+          <View style={styles.footerContent}>
+            <Text style={styles.headerTextTotal}>Discount (10%)</Text>
+            <Text style={styles.headerTextTotal}>-{((totalPrice * discount)).toFixed(2)} บาท</Text>
+          </View>
+        )}
+{discount > 0 && orderItems && (
+        <View style={styles.footerContent}>
+          <Text style={styles.headerTextTotal}>Final Price</Text>
+          <Text style={styles.headerTextTotal}>{finalPrice.toFixed(2)} บาท</Text>
+        </View>
+              )}
+
+<TouchableOpacity
+  style={[
+    styles.checkoutButton,
+    (!totalPrice || totalPrice === 0) && styles.disabledButton,
+  ]}
+  onPress={handleCheckout}
+  disabled={!totalPrice || totalPrice === 0}
+>
+  <Text
+    style={[
+      styles.checkoutButtonText,
+      (!totalPrice || totalPrice === 0) && styles.disabledButtonText,
+    ]}
+  >
+    Checkout
+  </Text>
+</TouchableOpacity>
       </SafeAreaView>
     </View>
   );
@@ -116,6 +248,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 250, // Space for footer
     marginTop:50
+  },
+  disabledButton: {
+    backgroundColor: '#A9A9A9', // Gray for disabled
   },
   productContainer: {
     flexDirection: "row",
@@ -213,6 +348,53 @@ const styles = StyleSheet.create({
     color: "#224E7F",
     fontSize: 18,
     fontWeight: "bold",
+  },
+
+  checkoutButton: {
+    backgroundColor: "#FEF6DD",
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: "center",
+    marginHorizontal: 50,
+  },
+  checkoutButtonText: {
+    color: "#224E7F",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  actionContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  quantityButton: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#224E7F",
+    borderRadius: 5,
+    backgroundColor: "#E9E6FA",
+  },
+  quantityText: {
+    fontSize: 18,
+    color: "#224E7F",
+    fontWeight: "bold",
+  },
+  quantityValue: {
+    marginHorizontal: 10,
+    fontSize: 18,
+    color: "#224E7F",
+  },
+  deleteButton: {
+    marginLeft: 10,
   },
 });
 

@@ -30,6 +30,7 @@ const Login = () => {
             if (data.status === 200) {
                 console.log('Login successful', data.roles[0].role.name );
                 await AsyncStorage.setItem('accessToken', data.token);
+                await AsyncStorage.setItem('role', data.roles[0].role.name);
 
                 // Check role and navigate accordingly
                 if (data.roles[0].role.name === "ADMIN") {

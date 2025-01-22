@@ -136,22 +136,25 @@ const AdminPage = ({ navigation ,route}) => {
 
 
             {/* Content Based on Active Tab */}
-            <ScrollView contentContainerStyle={styles.drinksContainer}>
-                {drinks ? (
-                    
-                    drinks.map((drink, index) => (
-                        <View key={index} style={styles.drinkItem}>
-                            <Image source={{ uri: drink.image }} style={styles.drinkImage} />
-                            <Text style={styles.drinkName}>{drink.name}</Text>
-                            <Text style={styles.drinkPrice}>{drink.price} ฿</Text>
-                        </View>
-                    ))
-                ) : (
-                    <View style={styles.noDataContainer}>
-                        <Text style={styles.noDataText}>ไม่มีเมนูเค้กในขณะนี้</Text>
-                    </View>
-                )}
-            </ScrollView>
+        <ScrollView contentContainerStyle={styles.drinksContainer}>
+            {drinks ? (
+                drinks.map((drink, index) => (
+                    <TouchableOpacity
+                        key={index}
+                        style={styles.drinkItem}
+                        onPress={() => navigation.navigate('ProductDetail', { productId: drink.id })}
+                    >
+                        <Image source={{ uri: drink.image }} style={styles.drinkImage} />
+                        <Text style={styles.drinkName}>{drink.name}</Text>
+                        <Text style={styles.drinkPrice}>{drink.price} ฿</Text>
+                    </TouchableOpacity>
+                ))
+            ) : (
+                <View style={styles.noDataContainer}>
+                    <Text style={styles.noDataText}>ไม่มีเมนูเค้กในขณะนี้</Text>
+                </View>
+            )}
+        </ScrollView>
            <TouchableOpacity style={styles.addButton}   onPress={() => navigation.navigate('ShoppingCart')}>
            <Feather name="shopping-cart" size={24} color="white" />
             </TouchableOpacity>

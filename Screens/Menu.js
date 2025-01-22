@@ -1,10 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet, Alert,TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Menu = () => {
     const navigation = useNavigation();
+    const [role, setRole] = useState();
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            const rolea = await AsyncStorage.getItem('role');
+            setRole(rolea);
+        };
+        fetchRole();
+    }, []);
+
     const handleLogout = async () => {
         try {
             await AsyncStorage.removeItem('accessToken');
@@ -18,6 +29,7 @@ const Menu = () => {
             Alert.alert('Error', 'Failed to log out. Please try again.');
         }
     };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -30,18 +42,41 @@ const Menu = () => {
             </View>
 
             <View style={styles.menuOptionContainer}>
-                <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('SaleAdmin')}>
-                    <Text style={styles.menuText}>Sales</Text>
-                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('OrderAdmin')}>
-                    <Text style={styles.menuText}>Order</Text>
-                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('AdminUserListPage')}>
-                    <Text style={styles.menuText}>User</Text>
-                    <Ionicons name="chevron-forward" size={24} color="#224E7F" />
-                </TouchableOpacity>
+                {role === "USER" ? (
+                    <>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('EditProfile')}>
+                            <Text style={styles.menuText}>Profile</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('CollectPoints')}>
+                            <Text style={styles.menuText}>สะสมแต้ม</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('OrderHistory')}>
+                            <Text style={styles.menuText}>Order History</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                    </>
+                ) : (
+                    <>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('SaleAdmin')}>
+                            <Text style={styles.menuText}>Sales</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('OrderAdmin')}>
+                            <Text style={styles.menuText}>Order</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('CheckoutOrder')}>
+                            <Text style={styles.menuText}>CheckOrder</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuOption} onPress={() => navigation.navigate('AdminUserListPage')}>
+                            <Text style={styles.menuText}>User</Text>
+                            <Ionicons name="chevron-forward" size={24} color="#224E7F" />
+                        </TouchableOpacity>
+                    </>
+                )}
                 <TouchableOpacity style={styles.menuOption} onPress={handleLogout}>
                     <Text style={styles.menuText}>Log Out</Text>
                     <Ionicons name="chevron-forward" size={24} color="#224E7F" />

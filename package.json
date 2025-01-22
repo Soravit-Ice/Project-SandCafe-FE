@@ -6,20 +6,22 @@
     "start": "NODE_OPTIONS=--openssl-legacy-provider expo start",
     "android": "NODE_OPTIONS=--openssl-legacy-provider expo start --android",
     "ios": "NODE_OPTIONS=--openssl-legacy-provider expo start --ios",
-    "web": "NODE_OPTIONS=--openssl-legacy-provider expo start --web"
+    "web": "NODE_OPTIONS=--openssl-legacy-provider expo start --web",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
-    "@expo/webpack-config": "^19.0.1",
-    "@react-native-async-storage/async-storage": "^1.23.1",
-    "@react-native-masked-view/masked-view": "^0.2.8",
+    "@expo/webpack-config": "^0.17.2",
+    "@react-native-async-storage/async-storage": "~1.17.3",
+    "@react-native-masked-view/masked-view": "0.2.8",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.7.9",
-    "expo": "~47.0.0",
+    "expo": "latest",
     "expo-image-picker": "~14.0.2",
     "expo-status-bar": "~1.4.2",
+    "expo-updates": "~0.15.6",
     "firebase": "^9.6.11",
     "react": "18.1.0",
     "react-dom": "18.1.0",
@@ -31,7 +33,8 @@
     "react-native-web": "0.18.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "patch-package": "^8.0.0"
   },
   "private": true
 }

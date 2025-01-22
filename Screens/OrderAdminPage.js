@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Pressable, ScrollView,TouchableOpacit
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import axios from 'axios';
 const OrderAdminPage = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [dates, setDates] = useState([]);
@@ -10,52 +11,79 @@ const OrderAdminPage = () => {
 
     const navigation = useNavigation();
 
-    const mockSalesData = {
-        '2024-11-03': [{ id: 1, item: 'Milk Frappe', sale: 1 }],
-        '2024-11-02': [{ id: 2, item: 'Brown Sugar', sale: 1 }],
-        '2024-11-05': [{ id: 1, item: 'Milk Frappe', sale: 1 }, { id: 2, item: 'Brown Sugar', sale: 1 }],
+    // Format date to DD/MM/YYYY
+    const formatToDDMMYYYY = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     };
 
+    // Fetch data based on the selected date
+    const fetchDateDefault = async (date) => {
+        try {
+            const formattedDate = formatToDDMMYYYY(new Date(date));
+            console.log("Fetching data for:", formattedDate);
+
+            const response = await axios.get(
+                `http://localhost:8080/api/orders?date=${formattedDate}`
+            );
+            console.log("Response:", response.data);
+
+            if (response.data && response.data.data) {
+                setSalesData(response.data.data);
+            } else {
+                setSalesData([]); // Clear if no data
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setSalesData([]); // Clear on error
+        }
+    };
+
+    // Initialize dates and default selection
     useEffect(() => {
         const today = new Date();
         const pastDates = [];
-        
+
         for (let i = 0; i < 8; i++) {
             const date = new Date(today);
             date.setDate(today.getDate() - i);
-            const formattedDate = date.toISOString().split('T')[0];
-            pastDates.push(formattedDate);
+            pastDates.push(date.toISOString().split('T')[0]);
         }
 
         setDates(pastDates.reverse());
-        setSelectedDate(pastDates[5]); // Default selected date
+        const defaultDate = pastDates[5];
+        setSelectedDate(defaultDate);
+        fetchDateDefault(defaultDate); // Fetch data for default date
     }, []);
 
-    useEffect(() => {
-        if (selectedDate) {
-            setSalesData(mockSalesData[selectedDate] || []);
-        }
-    }, [selectedDate]);
-
-    const RenderItem = ({ orderName , index }) => (
-        <View style={styles.tableRow}>
-            <Text style={styles.cell}>{index+1}.</Text>
-            <Text style={styles.cell}>{orderName.item}</Text>
-            <Text style={styles.cell}>{orderName.sale}</Text>
-        </View>
-    );
-
+    // Fetch data when a date is selected
     const onClickData = (date) => {
         setSelectedDate(date);
+        fetchDateDefault(date);
     };
+
+    // Render individual rows
+    const RenderItem = ({ orderName, index }) => (
+        <View style={styles.tableRow}>
+            <Text style={styles.cell}>{index + 1}.</Text>
+            <Text style={styles.cell}>{orderName?.product?.name}</Text>
+            <Text style={styles.cell}>{orderName.price}</Text>
+        </View>
+    );
 
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#FF8A4C" />
+                <Ionicons name="arrow-back" size={24} color="#224E7F" />
             </TouchableOpacity>
             <Text style={styles.title}>Order</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.dateTabContainer}>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.dateTabContainer}
+            >
                 {dates.map((date) => (
                     <Pressable
                         key={date}
@@ -79,11 +107,12 @@ const OrderAdminPage = () => {
                 renderItem={({ item, index }) => <RenderItem orderName={item} index={index} />}
                 keyExtractor={(item) => item.id.toString()}
                 ListEmptyComponent={<Text style={styles.noDataText}>No sales data</Text>}
-                style={styles.flatList} // เพิ่ม style นี้สำหรับ FlatList
+                style={styles.flatList}
             />
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -100,12 +129,12 @@ const styles = StyleSheet.create({
     },
     backText: {
         fontSize: 20,
-        color: '#FF7F50',
+        color: '#224E7F',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#FF7F50',
+        color: '#224E7F',
         marginBottom: 10,
     },
     dateTabContainer: {
@@ -113,7 +142,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     dateButton: {
-        backgroundColor: '#FF7F50',
+        backgroundColor: '#224E7F',
         borderRadius: 20,
         paddingVertical: 8,
         paddingHorizontal: 16,
@@ -138,7 +167,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
-        color: '#FF7F50',
+        color: '#224E7F',
         fontSize: 20,
         flex: 1,
         textAlign: 'center',
@@ -154,7 +183,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         flex: 1,
-        color: '#000',
+        color: '#224E7F',
     },
     noDataText: {
         textAlign: 'center',
