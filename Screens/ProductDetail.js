@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation , useRoute } from "@react-navigation/native";
@@ -124,8 +125,7 @@ const ProductDetail = () => {
     }
   }, [productId]);
   return (
-    <View style={styles.container}>
-      {/* Back Button */}
+<View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={styles.backButton}
@@ -133,78 +133,94 @@ const ProductDetail = () => {
         <Ionicons name="arrow-back" size={24} color="#224E7F" />
       </TouchableOpacity>
 
-      {/* Product Image */}
-      {product && (
-  <Image
-    source={{ uri: product.image }} // Safe access
-    style={styles.productImage}
-  />
-)}
-      {/* Product Details */}
-      {product &&( <Text style={styles.productName}>{product.name}</Text>)}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Product Image */}
+        {product && (
+          <Image
+            source={{ uri: product.image }}
+            style={styles.productImage}
+          />
+        )}
 
-      <View style={styles.sweetnessContainer}>
-        <Text style={styles.sectionTitle}>ระดับความหวาน</Text>
-        <Text style={styles.sweetnessNote}>**ปกติสูตรทางร้านหวาน 50 %**</Text>
-        {sweetnessLevels.map((level) => (
+        {/* Product Details */}
+        {product && <Text style={styles.productName}>{product.name}</Text>}
+
+        <View style={styles.sweetnessContainer}>
+          <Text style={styles.sectionTitle}>ระดับความหวาน</Text>
+          <Text style={styles.sweetnessNote}>
+            **ปกติสูตรทางร้านหวาน 50 %**
+          </Text>
+          {[100, 75, 50, 25, 0].map((value) => (
+            <TouchableOpacity
+              key={value}
+              style={styles.sweetnessOption}
+              onPress={() => setSelectedSweetness(value)}
+            >
+              <Ionicons
+                name={
+                  selectedSweetness === value
+                    ? "checkbox"
+                    : "square-outline"
+                }
+                size={20}
+                color="#224E7F"
+                style={styles.checkboxIcon}
+              />
+              <Text style={styles.sweetnessLabel}>
+                {value === 0
+                  ? "ไม่หวาน 0%"
+                  : `เพิ่มหวาน ${value}%`}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View style={styles.quantityContainer}>
+          <Text style={styles.sectionTitle}>จำนวน</Text>
+          <View style={styles.quantityControls}>
+            <TouchableOpacity
+              onPress={decreaseQuantity}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantity}>{quantity}</Text>
+            <TouchableOpacity
+              onPress={increaseQuantity}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.price}>ราคา {price}.-</Text>
+
+        <Text style={styles.sectionTitle}>Note</Text>
+        <TextInput
+          style={styles.noteInput}
+          onChangeText={(text) => setNote(text)}
+          value={note}
+          placeholder="เช่น แยกน้ำแข็ง"
+          placeholderTextColor="#A4A4A4"
+        />
+
+        {/* Buttons */}
+        <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            key={level.value}
-            style={styles.sweetnessOption}
-            onPress={() => handleSelectSweetness(level.value)}
+            style={styles.addToBasketButton}
+            onPress={addToBusket}
           >
-            <Ionicons
-              name={
-                selectedSweetness === level.value
-                  ? "checkbox"
-                  : "square-outline"
-              }
-              size={20}
-              color="#224E7F"
-              style={styles.checkboxIcon}
-            />
-            <Text style={styles.sweetnessLabel}>{level.label}</Text>
+            <Text style={styles.addToBasketText}>Add to Basket</Text>
           </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Quantity and Price */}
-      <View style={styles.quantityContainer}>
-        <Text style={styles.sectionTitle}>จำนวน</Text>
-        <View style={styles.quantityControls}>
-          <TouchableOpacity onPress={decreaseQuantity} style={styles.quantityButton}>
-            <Text style={styles.quantityButtonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantity}>{quantity}</Text>
-          <TouchableOpacity onPress={increaseQuantity} style={styles.quantityButton}>
-            <Text style={styles.quantityButtonText}>+</Text>
+          <TouchableOpacity
+            style={styles.buyNowButton}
+            onPress={buyNow}
+          >
+            <Text style={styles.buyNowText}>Buy Now</Text>
           </TouchableOpacity>
         </View>
-      </View>
-
-      <View style={styles.quantityContainer}>
-      <Text style={styles.price}>ราคา</Text>
-      <Text style={styles.price}>{price}.-</Text>
-      </View>
-
-      {/* Note Input */}
-      <Text style={styles.sectionTitle}>Note</Text>
-      <TextInput
-        style={styles.noteInput}
-        onChangeText={(text) => setNote(text)}
-        value={note}
-        placeholder="เช่น แยกน้ำแข็ง"
-        placeholderTextColor="#A4A4A4"
-      />
-
-      {/* Buttons */}
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.addToBasketButton} onPress={addToBusket}>
-          <Text style={styles.addToBasketText}>Add to Basket</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buyNowButton} onPress={buyNow}>
-          <Text style={styles.buyNowText}>Buy Now</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 };

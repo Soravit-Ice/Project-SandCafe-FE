@@ -139,24 +139,29 @@ const AdminAddMenu = () => {
       />
 
     <Text style={styles.title2}>Category</Text>
-      <RNPickerSelect
-        onValueChange={(value) => setCategory(value)}
-        items={categories}
-        style={pickerStyles}
-        placeholder={{ label: "Select a category", value: null }}
-      />
+    <RNPickerSelect
+  onValueChange={(value) => {
+    setCategory(value);
+    setSubcategory(""); // Reset subcategory when category changes
+  }}
+  items={categories}
+  style={pickerStyles}
+  placeholder={{ label: "Select a category", value: "" }}
+  doneText="Done"
+/>
 
-      {category &&  subcategories[category] && (
-        <>
-          <Text style={styles.title2}>Subcategory</Text>
-          <RNPickerSelect
-            onValueChange={(value) => setSubcategory(value)}
-            items={subcategories[category]}
-            style={pickerStyles}
-            placeholder={{ label: "Select a subcategory", value: null }}
-          />
-        </>
-      )}
+{category && subcategories[category] && (
+  <>
+    <Text style={styles.title2}>Subcategory</Text>
+    <RNPickerSelect
+      onValueChange={setSubcategory}
+      items={subcategories[category]}
+      style={pickerStyles}
+      placeholder={{ label: "Select a subcategory", value: "" }}
+      doneText="Done"
+    />
+  </>
+)}
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save</Text>
@@ -174,6 +179,7 @@ const pickerStyles = StyleSheet.create({
       borderColor: "#dddddd",
       backgroundColor: "white",
       paddingLeft: 16,
+      zIndex:25000000,
       marginBottom: 10,
     },
     inputAndroid: {
