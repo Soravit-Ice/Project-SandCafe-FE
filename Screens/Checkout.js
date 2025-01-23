@@ -7,7 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -107,7 +108,7 @@ const Checkout = () => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Back Button */}
       <TouchableOpacity
         onPress={() => navigation.goBack()}
@@ -150,7 +151,7 @@ const Checkout = () => {
           <Text style={styles.payButtonText}>ชำระเงิน</Text>
         </TouchableOpacity>
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 

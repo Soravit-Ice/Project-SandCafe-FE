@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -14,7 +15,7 @@ const CheckoutFinal = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Back Button */}
       <TouchableOpacity
         onPress={() => navigation.goBack()}
@@ -43,7 +44,7 @@ const CheckoutFinal = () => {
           <Text style={styles.homeButtonText}>กลับสู่หน้าหลัก</Text>
         </TouchableOpacity>
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 

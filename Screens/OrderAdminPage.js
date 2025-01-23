@@ -117,29 +117,25 @@ const OrderAdminPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop:50,
         backgroundColor: '#FFF',
         padding: 20,
-        alignItems: 'center',
     },
     backButton: {
         position: 'absolute',
-        top:10,
+        top: 20,
+        zIndex:999999,
         left: 20,
-    },
-    backText: {
-        fontSize: 20,
-        color: '#224E7F',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#224E7F',
-        marginBottom: 10,
+        marginBottom: 20,
+        textAlign: 'center',
     },
     dateTabContainer: {
         flexDirection: 'row',
-        marginBottom: 5,
+        marginBottom: 10,
     },
     dateButton: {
         backgroundColor: '#224E7F',
@@ -162,8 +158,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
-        marginBottom: 10,
-        marginTop:-650
+        marginBottom: 600,
     },
     headerText: {
         fontWeight: 'bold',
@@ -191,8 +186,8 @@ const styles = StyleSheet.create({
         color: '#888',
     },
     flatList: {
-        flex: 1, // ทำให้ FlatList ขยายเต็มที่
-        width: '100%', // เพื่อให้ FlatList ครอบคลุมพื้นที่ที่เหมาะสม
+        flex: 1,
+        width: '100%',
     },
 });
 
