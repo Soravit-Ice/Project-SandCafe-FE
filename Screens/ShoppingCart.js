@@ -23,7 +23,7 @@ const ShoppingCartScreen = () => {
   const fetchOrderDetails = async () => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
-      const response = await axios.get(`http://localhost:8080/api/getOrderDetail`, {
+      const response = await axios.get(`https://project-sandcafe-be.onrender.com/api/getOrderDetail`, {
         headers: {
           "x-access-token": token,
         },
@@ -40,7 +40,7 @@ const ShoppingCartScreen = () => {
   const fetchDiscount = async () => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
-      const response = await axios.get(`http://localhost:8080/api/getDiscount`, {
+      const response = await axios.get(`https://project-sandcafe-be.onrender.com/api/getDiscount`, {
         headers: { "x-access-token": token },
       });
       const data = response?.data;
@@ -66,7 +66,7 @@ const ShoppingCartScreen = () => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.put(
-        `http://localhost:8080/api/updateOrderItem/${itemId}`,
+        `https://project-sandcafe-be.onrender.com/api/updateOrderItem/${itemId}`,
         { quantity },
         {
           headers: {
@@ -100,7 +100,7 @@ const ShoppingCartScreen = () => {
   const deleteOrderItem = async (itemId) => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
-      await axios.delete(`http://localhost:8080/api/deleteOrderItem/${itemId}`, {
+      await axios.delete(`https://project-sandcafe-be.onrender.com/api/deleteOrderItem/${itemId}`, {
         headers: {
           "x-access-token": token,
         },
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 60,
+    top: 80,
     left: 10,
   },
   title: {

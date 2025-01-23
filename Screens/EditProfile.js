@@ -25,7 +25,7 @@ const EditProfile = () => {
         try {
             const token = await AsyncStorage.getItem("accessToken");
             const response = await axios.post(
-                'http://localhost:8080/api/updateUser',
+                'https://project-sandcafe-be.onrender.com/api/updateUser',
                 { name, phoneNumber, email }, // Data sent to the backend
                 {
                     headers: {
@@ -49,7 +49,7 @@ const EditProfile = () => {
     const fetchUserData = async () => {
         try {
             const token = await AsyncStorage.getItem("accessToken");
-            const response = await axios.get('http://localhost:8080/api/getUserById', {
+            const response = await axios.get('https://project-sandcafe-be.onrender.com/api/getUserById', {
                     headers: {
                         "x-access-token": token,
                     },

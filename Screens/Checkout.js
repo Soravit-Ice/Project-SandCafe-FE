@@ -55,7 +55,7 @@ const Checkout = () => {
       formData.append("delivery_date", deliveryDate);
   
       await axios.post(
-        "http://localhost:8080/api/checkoutOrder",
+        "https://project-sandcafe-be.onrender.com/api/checkoutOrder",
         formData,
         {
           headers: {
@@ -78,7 +78,7 @@ const Checkout = () => {
         try {
             const token = await AsyncStorage.getItem("accessToken");
           const response = await axios.get(
-            `http://localhost:8080/api/getUserById`,
+            `https://project-sandcafe-be.onrender.com/api/getUserById`,
             {
               headers: {
                 "x-access-token": token,

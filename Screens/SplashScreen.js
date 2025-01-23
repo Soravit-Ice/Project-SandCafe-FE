@@ -10,15 +10,21 @@ const SplashScreen = () => {
         const checkToken = async () => {
             try {
                 const token = await AsyncStorage.getItem('accessToken');
+                const role = await AsyncStorage.getItem('role');
                 
                 // Delay for 2 seconds before navigating
                 setTimeout(() => {
-                    if (token) {
+                    if (token && role === "ADMIN") {
                         navigation.reset({
                             index: 0,
                             routes: [{ name: 'AdminPage' }],
                         });
-                    } else {
+                    } else if(token && role === "USER"){
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'UserPage' }],
+                        });
+                    }else {
                         navigation.reset({
                             index: 0,
                             routes: [{ name: 'Login' }],

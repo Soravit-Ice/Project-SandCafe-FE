@@ -79,7 +79,7 @@ const ProductDetail = () => {
           note,
         });
   
-        const response = await fetch("http://localhost:8080/api/addToOrder", {
+        const response = await fetch("https://project-sandcafe-be.onrender.com/api/addToOrder", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -109,7 +109,7 @@ const ProductDetail = () => {
     const fetchProductDetails = async () => {
       try {
         // Replace with your API endpoint or data source
-        const response = await fetch(`http://localhost:8080/api/findProduct/${productId}`);
+        const response = await fetch(`https://project-sandcafe-be.onrender.com/api/findProduct/${productId}`);
         const data = await response.json();
         console.log("data",data)
         setProduct(data.data);

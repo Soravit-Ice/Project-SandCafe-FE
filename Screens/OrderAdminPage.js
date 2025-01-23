@@ -26,7 +26,7 @@ const OrderAdminPage = () => {
             console.log("Fetching data for:", formattedDate);
 
             const response = await axios.get(
-                `http://localhost:8080/api/orders?date=${formattedDate}`
+                `https://project-sandcafe-be.onrender.com/api/orders?date=${formattedDate}`
             );
             console.log("Response:", response.data);
 

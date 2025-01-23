@@ -11,7 +11,7 @@ const CheckoutOrder = () => {
 
     const fetchOrderDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/getOrderDetailAdmin`);
+            const response = await axios.get(`https://project-sandcafe-be.onrender.com/api/getOrderDetailAdmin`);
             const data = response.data.data;
             setOrders(data);
         } catch (error) {
@@ -22,7 +22,7 @@ const CheckoutOrder = () => {
     const updateOrderStatus = async (orderId, status) => {
         try {
             const response = await axios.put(
-                `http://localhost:8080/api/changeStatusOrder/${orderId}`,
+                `https://project-sandcafe-be.onrender.com/api/changeStatusOrder/${orderId}`,
                 { status }
             );
             if (response.status === 200) {

@@ -12,7 +12,7 @@ const AdminPage = ({ navigation ,route}) => {
     const fetchDrinks = async () => {
         console.log("activeTab",activeTab , activeTab2)
         try {
-          const response = await axios.get( `http://localhost:8080/api/productFindAll?tab=${activeTab}&subcategory=${activeTab2}`);
+          const response = await axios.get( `https://project-sandcafe-be.onrender.com/api/productFindAll?tab=${activeTab}&subcategory=${activeTab2}`);
           setDrinks(response.data.data);
         } catch (error) {
           console.error("Error fetching drinks:", error);

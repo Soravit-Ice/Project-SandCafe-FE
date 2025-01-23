@@ -16,7 +16,7 @@ const CollectPoints = () => {
     const fetchPoints = async () => {
         const token = await AsyncStorage.getItem("accessToken");
         try {
-            const response = await axios.get('http://localhost:8080/api/getPointUserById', {
+            const response = await axios.get('https://project-sandcafe-be.onrender.com/api/getPointUserById', {
                 headers: {
                     "x-access-token": token,
                 },
@@ -50,7 +50,7 @@ const CollectPoints = () => {
         const token = await AsyncStorage.getItem("accessToken");
         try {
             const response = await axios.post(
-                'http://localhost:8080/api/redeemPoints',
+                'https://project-sandcafe-be.onrender.com/api/redeemPoints',
                 { redeemedPoints: redeemablePoints },
                 {
                     headers: {
