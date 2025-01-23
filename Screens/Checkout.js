@@ -25,10 +25,9 @@ const Checkout = () => {
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
@@ -46,16 +45,16 @@ const Checkout = () => {
 
       if (selectedImage) {
         formData.append("file", {
-          uri: selectedImage.uri,
-          name: selectedImage.fileName || "uploaded_image.jpg",
-          type: selectedImage.type || "image/jpeg",
+          uri: selectedImage?.uri,
+          name: selectedImage?.fileName || "image/jpeg",
+          type: selectedImage?.type || "image/jpeg",
         });
       }
   
       formData.append("user_id", userDetail?.id || ""); 
       formData.append("delivery_date", deliveryDate);
-  
-      await axios.post(
+        console.log("fromdata" , formData)
+       axios.post(
         "https://project-sandcafe-be.onrender.com/api/checkoutOrder",
         formData,
         {
@@ -68,7 +67,7 @@ const Checkout = () => {
   
       navigation.navigate("CheckoutFinal", { refresh: true });
     } catch (error) {
-      console.error("Error during checkout:", error);
+      console.error("Error during checkout:", error.message);
       Alert.alert("Error", "Failed to complete the checkout. Please try again.");
     }
   };
