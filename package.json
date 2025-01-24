@@ -30,7 +30,8 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "0.19.13",
     "expo-updates": "~0.26.13",
-    "@react-native-picker/picker": "2.9.0"
+    "@react-native-picker/picker": "2.9.0",
+    "expo-build-properties": "~0.13.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import mime from "mime";
 const Checkout = () => {
   const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -32,6 +33,7 @@ const Checkout = () => {
     });
 
     if (!result.canceled) {
+      console.log("image",result.assets[0]); 
       setSelectedImage(result.assets[0]);
     }
   };
@@ -41,20 +43,20 @@ const Checkout = () => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const formData = new FormData();
-  
+      console.log("token",token)
 
       if (selectedImage) {
+        const newImageUri =  "file:///" + selectedImage?.uri.split("file:/").join("")
         formData.append("file", {
-          uri: selectedImage?.uri,
-          name: selectedImage?.fileName || "image/jpeg",
-          type: selectedImage?.type || "image/jpeg",
+          uri: newImageUri,
+          name: selectedImage?.fileName || "slip.jpg",
+          type: mime.getType(newImageUri) || "image/jpeg",
         });
       }
   
       formData.append("user_id", userDetail?.id || ""); 
       formData.append("delivery_date", deliveryDate);
-        console.log("fromdata" , formData)
-       axios.post(
+      await axios.post(
         "https://project-sandcafe-be.onrender.com/api/checkoutOrder",
         formData,
         {
@@ -63,11 +65,11 @@ const Checkout = () => {
             "x-access-token": token,
           },
         }
-      );
-  
+      )
       navigation.navigate("CheckoutFinal", { refresh: true });
+  
     } catch (error) {
-      console.error("Error during checkout:", error.message);
+      console.error("Error during checkout:", error);
       Alert.alert("Error", "Failed to complete the checkout. Please try again.");
     }
   };
