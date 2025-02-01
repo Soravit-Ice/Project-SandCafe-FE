@@ -9,6 +9,7 @@ const CollectPoints = () => {
     const navigation = useNavigation();
     const [points, setPoints] = useState([]); // Points state
     const [loading, setLoading] = useState(true); // Loading state
+      const [userDetail, setUserDetail] = useState(null);
     const [availablePoints, setAvailablePoints] = useState(0); // Available points
     const [redeemablePoints, setRedeemablePoints] = useState(10); // Default redeemable points
 
@@ -39,6 +40,29 @@ const CollectPoints = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+          try {
+              const token = await AsyncStorage.getItem("accessToken");
+            const response = await axios.get(
+              `https://project-sandcafe-be.onrender.com/api/getUserById`,
+              {
+                headers: {
+                  "x-access-token": token,
+                },
+              }
+            );
+            const data = await response.data.data;
+            console.log("data",data)
+            setUserDetail(data)
+          } catch (error) {
+            console.error("Error fetching product details:", error);
+          }
+        };
+  
+          fetchUserDetails();
+      }, []);
 
     // Redeem points function
     const redeemPoints = async () => {
@@ -94,7 +118,7 @@ const CollectPoints = () => {
             {/* Profile Section */}
             <View style={styles.profileSection}>
                 <Ionicons name="person-circle" size={80} color="#224E7F" />
-                <Text style={styles.userName}>Elizabeth Wang Adward</Text>
+                <Text style={styles.userName}>{userDetail?.name}</Text>
             </View>
 
             {/* Points Section */}
