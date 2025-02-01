@@ -1,5 +1,5 @@
 import React, { useState , useEffect , useCallback} from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView ,Alert} from 'react-native';
 import { Ionicons , Feather , MaterialCommunityIcons,Entypo} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from "@react-navigation/native";
@@ -8,7 +8,7 @@ const AdminPage = ({ navigation ,route}) => {
     const [drinks, setDrinks] = useState([]);
     const [activeTab, setActiveTab] = useState('drinks');
     const [activeTab2, setActiveTab2] = useState('coffee'); 
-
+    const [longPressItem, setLongPressItem] = useState(null);
     const fetchDrinks = async () => {
         console.log("activeTab",activeTab , activeTab2)
         try {
@@ -42,6 +42,33 @@ const AdminPage = ({ navigation ,route}) => {
         setActiveTab2("")
         fetchDrinks()
     }
+
+    const deleteProduct = async (id) => {
+      try {
+          await axios.delete(`https://project-sandcafe-be.onrender.com/api/deleteProduct/${id}`).then((data)=>{
+            if(data.status === 200){
+              Alert.alert("สำเร็จ", "สินค้าถูกลบเรียบร้อยแล้ว");
+            }else{
+              Alert.alert("ล้มเหลว", "เกิดข้อผิดพลาดในการลบสินค้า");
+            }
+          });
+          fetchDrinks(); // รีเฟรชข้อมูลใหม่หลังลบ
+      } catch (error) {
+          Alert.alert("ล้มเหลว", "เกิดข้อผิดพลาดในการลบสินค้า");
+          console.error("Error deleting product:", error);
+      }
+  };
+
+  const confirmDelete = (id) => {
+      Alert.alert(
+          "ยืนยันการลบ",
+          "คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้?",
+          [
+              { text: "ยกเลิก", style: "cancel" },
+              { text: "ลบ", style: "destructive", onPress: () => deleteProduct(id) }
+          ]
+      );
+  };
 
     return (
         <View style={styles.container}>
@@ -140,11 +167,26 @@ const AdminPage = ({ navigation ,route}) => {
                 {drinks ? (
                     
                     drinks.map((drink, index) => (
+                      <TouchableOpacity
+                      key={drink.id}
+                      style={styles.drinkItem}
+                      onLongPress={() => setLongPressItem(drink.id)} // เปิดปุ่มลบ
+                  >
                         <View key={index} style={styles.drinkItem}>
                             <Image source={{ uri: drink.image }} style={styles.drinkImage} />
                             <Text style={styles.drinkName}>{drink.name}</Text>
                             <Text style={styles.drinkPrice}>{drink.price} ฿</Text>
                         </View>
+
+                        {longPressItem === drink.id && (
+                                <TouchableOpacity
+                                    style={styles.deleteButton}
+                                    onPress={() => confirmDelete(drink.id)}
+                                >
+                                    <Text style={styles.deleteButtonText}>ลบ</Text>
+                                </TouchableOpacity>
+                            )}
+                        </TouchableOpacity>
                     ))
                 ) : (
                     <View style={styles.noDataContainer}>
@@ -259,7 +301,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     drinkItem: {
-        width: '45%',
+        width: '15%',
         alignItems: 'center',
         marginBottom: 20,
         backgroundColor: '#FFF',
@@ -292,6 +334,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    drinkItem: {
+      position: 'relative',
+      width: '45%',
+      alignItems: 'center',
+      marginBottom: 20,
+      backgroundColor: '#FFF',
+      padding: 10,
+      borderRadius: 15,
+  },
+  deleteButton: {
+      position: 'absolute',
+      bottom: -10,
+      right: -10,
+      backgroundColor: 'red',
+      borderRadius: 15,
+      padding: 5,
+  },
+  deleteButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+  },
+
 });
 
 export default AdminPage;

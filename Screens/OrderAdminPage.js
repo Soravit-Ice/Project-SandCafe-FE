@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
-        marginBottom: 600,
+        marginBottom:20,
     },
     headerText: {
         fontWeight: 'bold',
@@ -186,7 +186,8 @@ const styles = StyleSheet.create({
         color: '#888',
     },
     flatList: {
-        flex: 1,
+        flexGrow: 1,
+        height:'100%',
         width: '100%',
     },
 });

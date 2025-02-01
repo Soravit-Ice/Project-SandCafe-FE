@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -100,6 +101,7 @@ const AdminAddMenu = () => {
   };
 
   return (
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.navigate("AdminPage", { refresh: true })} style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="#224E7F" />
@@ -167,6 +169,7 @@ const AdminAddMenu = () => {
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
@@ -194,6 +197,9 @@ const pickerStyles = StyleSheet.create({
   });
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     marginTop: 20,
