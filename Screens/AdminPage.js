@@ -2,6 +2,7 @@ import React, { useState , useEffect , useCallback} from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView ,Alert} from 'react-native';
 import { Ionicons , Feather , MaterialCommunityIcons,Entypo} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { registerForPushNotificationsAsync } from "../notificationFunction";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
 const AdminPage = ({ navigation ,route}) => {
@@ -30,6 +31,23 @@ const AdminPage = ({ navigation ,route}) => {
     useEffect(() => {
       fetchDrinks(activeTab);
     }, [activeTab, activeTab2]);
+
+    const fetchAndSavePushToken = async () => {
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        const userToken = await AsyncStorage.getItem("accessToken");
+        await axios.post("https://project-sandcafe-be.onrender.com/api/save-fcm-token", {
+          push_token: token,
+        }, {
+          headers: { "x-access-token": userToken },
+        });
+      }
+    };
+    
+    // Call this function after admin logs in
+    useEffect(() => {
+      fetchAndSavePushToken();
+    }, []);
 
     const onChangeTab2 = async () => {
         setActiveTab('desserts')

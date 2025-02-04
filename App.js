@@ -1,4 +1,7 @@
-import React ,  { useState } from 'react';
+import React ,  { useState , useEffect , useRef} from 'react';
+import * as Notifications from "expo-notifications"
+import {Platform} from "react-native"
+import * as Device from "expo-device"
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -35,6 +38,7 @@ const Tab = createBottomTabNavigator();
 const FontSizeContext = React.createContext();
 
 const HomeTabs = () => (
+  
   <Tab.Navigator
       screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
