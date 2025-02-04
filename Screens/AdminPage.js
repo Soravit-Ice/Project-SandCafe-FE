@@ -42,6 +42,8 @@ const AdminPage = ({ navigation ,route}) => {
         }, {
           headers: { "x-access-token": userToken },
         });
+      }else{
+        alert("Failed to get push token for push notification!");
       }
     };
     
