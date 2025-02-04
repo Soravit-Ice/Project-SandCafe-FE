@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { registerForPushNotificationsAsync } from "../notificationFunction";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 const AdminPage = ({ navigation ,route}) => {
     const [drinks, setDrinks] = useState([]);
     const [activeTab, setActiveTab] = useState('drinks');

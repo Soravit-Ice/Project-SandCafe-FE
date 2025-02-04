@@ -4,6 +4,7 @@ import { Ionicons , Feather , MaterialCommunityIcons,Entypo} from '@expo/vector-
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from "@react-navigation/native";
 import { registerForPushNotificationsAsync } from "../notificationFunction";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from 'axios';
 const AdminPage = ({ navigation ,route}) => {
     const [drinks, setDrinks] = useState([]);
