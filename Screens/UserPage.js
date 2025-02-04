@@ -37,7 +37,7 @@ const AdminPage = ({ navigation ,route}) => {
       if (token) {
         const userToken = await AsyncStorage.getItem("accessToken");
         await axios.post("https://project-sandcafe-be.onrender.com/api/save-fcm-token", {
-          push_token: token,
+          token: token,
         }, {
           headers: { "x-access-token": userToken },
         });
