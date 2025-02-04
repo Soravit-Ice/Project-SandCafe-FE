@@ -36,6 +36,7 @@ const AdminPage = ({ navigation ,route}) => {
     const fetchAndSavePushToken = async () => {
       const token = await registerForPushNotificationsAsync();
       if (token) {
+        alert(token);
         const userToken = await AsyncStorage.getItem("accessToken");
         await axios.post("https://project-sandcafe-be.onrender.com/api/save-fcm-token", {
           token: token,
