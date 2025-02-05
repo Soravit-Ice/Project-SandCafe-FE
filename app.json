@@ -39,7 +39,7 @@
         "android.permission.INTERNET"
       ],
       "package": "com.ice110700.sandcafe",
-      "googleServicesFile":"./google-services.json"
+      "googleServicesFile":"./android/app/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
