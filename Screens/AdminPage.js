@@ -50,6 +50,7 @@ const AdminPage = ({ navigation ,route}) => {
     
     // Call this function after admin logs in
     useEffect(() => {
+      alert("useEffectAdmin")
       fetchAndSavePushToken();
     }, []);
 
