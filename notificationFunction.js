@@ -21,8 +21,7 @@ export async function registerForPushNotificationsAsync() {
 
     token = await Notifications.getExpoPushTokenAsync({
       projectId : Constants.expoConfig?.extra?.eas.projectId
-    });
-    alert("Expo Push Token:", token);
+    }).data;
     console.log("Expo Push Token:", token);
   } else {
     alert("Must use a physical device for Push Notifications");
@@ -34,6 +33,8 @@ export async function registerForPushNotificationsAsync() {
       importance: Notifications.AndroidImportance.MAX,
     });
   }
+
+  alert("Expo Push Token:", token);
 
   return token;
 }
