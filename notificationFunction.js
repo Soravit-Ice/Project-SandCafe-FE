@@ -13,16 +13,14 @@ export async function registerForPushNotificationsAsync() {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
-
     if (finalStatus !== "granted") {
       alert("Failed to get push token for push notification!");
       return;
     }
-
-    token = await Notifications.getExpoPushTokenAsync({
-      projectId : Constants.expoConfig?.extra?.eas.projectId
-    }).data;
-    console.log("Expo Push Token:", token);
+    const projectId = Constants.expoConfig?.extra?.eas?.projectId
+    console.log("Constants.expoConfig?.extra?.eas.projectId",Constants.expoConfig?.extra?.eas?.projectId)
+    const response = await Notifications.getExpoPushTokenAsync({ projectId });
+    token = response.data
   } else {
     alert("Must use a physical device for Push Notifications");
   }
@@ -31,10 +29,11 @@ export async function registerForPushNotificationsAsync() {
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#224E7F",
     });
   }
 
-  alert("Expo Push Token:", token);
 
   return token;
 }

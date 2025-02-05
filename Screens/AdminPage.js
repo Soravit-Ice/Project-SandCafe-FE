@@ -35,14 +35,19 @@ const AdminPage = ({ navigation ,route}) => {
 
     const fetchAndSavePushToken = async () => {
       const token = await registerForPushNotificationsAsync();
+      console.log("token",token)
       if (token) {
-        alert(token);
         const userToken = await AsyncStorage.getItem("accessToken");
+        console.log("userToken",userToken)
+        try{
         await axios.post("https://project-sandcafe-be.onrender.com/api/save-fcm-token", {
           token: token,
         }, {
           headers: { "x-access-token": userToken },
         });
+      }catch(e){
+        console.log("error",e.message)
+      }
       }else{
         alert("Failed to get push token for push notification!");
       }
@@ -50,7 +55,6 @@ const AdminPage = ({ navigation ,route}) => {
     
     // Call this function after admin logs in
     useEffect(() => {
-      alert("useEffectAdmin")
       fetchAndSavePushToken();
     }, []);
 

@@ -23,9 +23,6 @@
       "bundleIdentifier": "com.ice110700.sandcafe"
     },
     "android": {
-      "android": {
-        "useNextNotificationsApi": true
-      },
       "config": {
         "usesCleartextTraffic": true
       },
