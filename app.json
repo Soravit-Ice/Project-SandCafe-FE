@@ -23,6 +23,9 @@
       "bundleIdentifier": "com.ice110700.sandcafe"
     },
     "android": {
+      "android": {
+        "useNextNotificationsApi": true
+      },
       "config": {
         "usesCleartextTraffic": true
       },
@@ -36,7 +39,7 @@
         "android.permission.INTERNET"
       ],
       "package": "com.ice110700.sandcafe",
-      "googleServicesFile":"./android/app/google-services.json"
+      "googleServicesFile":"./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
