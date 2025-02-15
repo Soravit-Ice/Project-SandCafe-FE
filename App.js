@@ -31,6 +31,7 @@ import CheckoutOrder from './Screens/CheckoutOrder';
 import OrderHistory from './Screens/OrderHistory';
 import CollectPoints from './Screens/CollectPoints';
 import EditProfile from './Screens/EditProfile';
+import CheckoutOrderSummary from './Screens/CheckoutOrderDetail';
 const Stack = createStackNavigator()
 
 const Tab = createBottomTabNavigator();
@@ -90,6 +91,7 @@ export default function App() {
                 <Stack.Screen name="Detail" component={Detail} />
                 <Stack.Screen name="SaleAdmin" component={SaleAdminPage} options={{ headerShown: false }} />
                 <Stack.Screen name="OrderAdmin" component={OrderAdminPage} options={{ headerShown: false }} />
+                <Stack.Screen name="CheckoutOrderSummary" component={CheckoutOrderSummary} options={{ headerShown: false }} />
                 <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }} />
                 <Stack.Screen name="CollectPoints" component={CollectPoints} options={{ headerShown: false }} />
                 <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />

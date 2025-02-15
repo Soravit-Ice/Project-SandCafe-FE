@@ -50,6 +50,10 @@ const OrderHistory = () => {
             <FlatList
                 data={orders}
                 renderItem={({ item }) => (
+                            <TouchableOpacity 
+                                style={styles.orderCard}
+                                onPress={() => navigation.navigate('CheckoutOrderSummary', { orderId: item.id })}
+                            >
                     <View style={styles.orderCard}>
                         {item?.items?.map((subItem) => (
                             <View key={subItem.id} style={styles.orderSubItem}>
@@ -65,6 +69,7 @@ const OrderHistory = () => {
                             Total Price: ${item.items.reduce((total, subItem) => total + subItem.price, 0)}
                         </Text>
                     </View>
+                    </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.orderdetail_id.toString()}
             />

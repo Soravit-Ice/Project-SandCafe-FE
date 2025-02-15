@@ -9,16 +9,6 @@ const CheckoutOrder = () => {
     const [orders, setOrders] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
 
-    const fetchOrderDetails = async () => {
-        try {
-            const response = await axios.get(`https://project-sandcafe-be.onrender.com/api/getOrderDetailAdmin`);
-            const data = response.data.data;
-            setOrders(data);
-        } catch (error) {
-            console.error("Error fetching order details:", error);
-        }
-    };
-
     const updateOrderStatus = async (orderId, status) => {
         try {
             const response = await axios.put(
@@ -32,13 +22,24 @@ const CheckoutOrder = () => {
             console.error(`Error updating order status for ${orderId}:`, error);
         }
     };
-
+    
     const confirmOrder = (orderId) => {
         updateOrderStatus(orderId, 1); // 1 = Confirm
     };
-
+    
     const rejectOrder = (orderId) => {
         updateOrderStatus(orderId, 2); // 2 = Reject
+    };
+
+    const fetchOrderDetails = async () => {
+        try {
+            const response = await axios.get(`https://project-sandcafe-be.onrender.com/api/getOrderDetailAdmin`);
+            const data = response.data.data;
+            setOrders(data);
+            console.log("orders", orders);
+        } catch (error) {
+            console.error("Error fetching order details:", error);
+        }
     };
 
     useEffect(() => {
@@ -48,41 +49,45 @@ const CheckoutOrder = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                <Ionicons name="arrow-back" size={24} color="#FF8A4C" />
+                <Ionicons name="arrow-back" size={24} color="#224E7F" />
             </TouchableOpacity>
             <Text style={styles.title}>Checkout Orders</Text>
             <FlatList
-                data={orders}
-                renderItem={({ item }) => (
-                    <View style={styles.orderCard}>
-                        <TouchableOpacity onPress={() => setPreviewImage(item.image)}>
-                            <Image source={{ uri: item.image }} style={styles.orderImage} />
-                        </TouchableOpacity>
-                        <Text style={styles.userName}>{item.name}</Text>
-                        <Text style={styles.priceText}>Price: ${item.price}</Text>
-                        {item.status === 'Confirm' ? (
-                            <Text style={styles.successText}>Order Confirmed</Text>
-                        ) : (
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity 
-                                    style={[styles.confirmButton, item.status === 'Confirm' && styles.disabledButton]} 
-                                    onPress={() => confirmOrder(item.id)}
-                                    disabled={item.status === 'Confirm'}
-                                >
-                                    <Text style={styles.buttonText}>Confirm</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity 
-                                    style={styles.rejectButton} 
-                                    onPress={() => rejectOrder(item.id)}
-                                >
-                                    <Text style={styles.buttonText}>Reject</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    </View>
-                )}
-                keyExtractor={(item) => item.id}
-            />
+    data={orders}
+    renderItem={({ item }) => (
+        <TouchableOpacity 
+            style={styles.orderCard}
+            onPress={() => navigation.navigate('CheckoutOrderSummary', { orderId: item.id })}
+        >
+            <TouchableOpacity onPress={() => setPreviewImage(item.image)}>
+                <Image source={{ uri: item.image }} style={styles.orderImage} />
+            </TouchableOpacity>
+            <Text style={styles.userName}>{item.name}</Text>
+            <Text style={styles.priceText}>Price: ${item.price}</Text>
+
+            {item.status === 'Confirm' ? (
+                <Text style={styles.successText}>Order Confirmed</Text>
+            ) : (
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity 
+                        style={[styles.confirmButton, item.status === 'Confirm' && styles.disabledButton]} 
+                        onPress={() => confirmOrder(item.id)}
+                        disabled={item.status === 'Confirm'}
+                    >
+                        <Text style={styles.buttonText}>Confirm</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.rejectButton} 
+                        onPress={() => rejectOrder(item.id)}
+                    >
+                        <Text style={styles.buttonText}>Reject</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+        </TouchableOpacity>
+    )}
+    keyExtractor={(item) => item.id.toString()}
+/>
             {previewImage && (
                 <Modal transparent={true} visible={!!previewImage} animationType="slide">
                     <View style={styles.modalContainer}>
@@ -108,7 +113,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#FF7F50',
+        color: '#224E7F',
         marginBottom: 10,
     },
     orderCard: {
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     userName: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#FF7F50',
+        color: '#224E7F',
     },
     priceText: {
         fontSize: 16,
@@ -134,6 +139,26 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 8,
         marginBottom: 10,
+    },
+    backButton: {
+        top: 0,
+        left: 0,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.8)',
+    },
+    modalImage: {
+        width: '90%',
+        height: '70%',
+        borderRadius: 8,
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 50,
+        right: 20,
     },
     successText: {
         color: 'green',
@@ -165,26 +190,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontWeight: 'bold',
     },
-    backButton: {
-        top: 0,
-        left: 0,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.8)',
-    },
-    modalImage: {
-        width: '90%',
-        height: '70%',
-        borderRadius: 8,
-    },
-    modalCloseButton: {
-        position: 'absolute',
-        top: 50,
-        right: 20,
-    },
+    
 });
 
 export default CheckoutOrder;
