@@ -45,6 +45,8 @@ const CheckoutOrderSummary = () => {
                     <Text style={styles.orderText}>คุณ: {orderDetails.user.name}</Text>
                     <Text style={styles.orderText}>เบอร์: {orderDetails.user.phone_number}</Text>
                     <Text style={styles.orderText}>Price: {orderDetails.price} ฿</Text>
+                    <Text style={styles.orderText}>วันที่สั่งซื้อ: {new Date(orderDetails.created_at).toLocaleDateString('th-TH')}</Text>
+                    <Text style={styles.orderText}>วันที่ได้รับ: {new Date(new Date(orderDetails.created_at).setDate(new Date(orderDetails.created_at).getDate() + 2)).toLocaleDateString('th-TH')}</Text>
                     <Text style={styles.subTitle}>รายการสั่งซื้อ:</Text>
                     <FlatList
                         data={orderDetails.products}
