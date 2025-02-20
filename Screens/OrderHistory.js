@@ -30,8 +30,12 @@ const OrderHistory = () => {
                 acc[orderdetail_id].items.push(order);
                 return acc;
             }, {});
-
-            setOrders(Object.values(groupedOrders));
+            
+            // เรียง `groupedOrders` ตาม `orderdetail_id` (จากมากไปน้อย)
+            const sortedGroupedOrders = Object.values(groupedOrders).sort(
+                (a, b) => b.orderdetail_id - a.orderdetail_id
+            );
+            setOrders(Object.values(sortedGroupedOrders));
         } catch (error) {
             console.error("Error fetching order details:", error);
         }
@@ -52,7 +56,7 @@ const OrderHistory = () => {
                 renderItem={({ item }) => (
                             <TouchableOpacity 
                                 style={styles.orderCard}
-                                onPress={() => navigation.navigate('CheckoutOrderSummary', { orderId: item.id })}
+                                onPress={() => navigation.navigate('CheckoutOrderSummary', { orderId: item.orderdetail_id })}
                             >
                     <View style={styles.orderCard}>
                         {item?.items?.map((subItem) => (
@@ -66,7 +70,7 @@ const OrderHistory = () => {
                             </View>
                         ))}
                         <Text style={styles.totalPriceText}>
-                            Total Price: ${item.items.reduce((total, subItem) => total + subItem.price, 0)}
+                            Total Price: ${item.items?.reduce((total, subItem) => total + subItem.price, 0)}
                         </Text>
                     </View>
                     </TouchableOpacity>
